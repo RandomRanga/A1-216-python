@@ -8,24 +8,24 @@ def read_initial_state_from_file(filename):
     # Replace the line below with your code.
     
     with open(filename, 'r') as file:
-        #read lines of the file
+        # Read lines of the file
         height = int(file.readline())
         width = int(file.readline())
 
-        #creates an empty garden 
+        # Create an empty garden 
         garden = [[''] * width for _ in range(height)]
 
-        #find rock postions and makes them. pointer currently at line 3. 
+        # Find rock positions and mark them
         for line in file: 
-            postion = line.strip().split(',')
-            row = int (postion[0])
-            col = int (postion[1])
+            position = line.strip().split(',')
+            row = int(position[0])
+            col = int(position[1])
             garden[row][col] = 'rock'
         
         monk_pos = None
         Monk_dir = None
-        #converts garden and everything else to a tuple
-        state = (tuple(tuple(tile)for tile in garden), monk_pos, Monk_dir)
+        # Convert garden and everything else to a tuple
+        state = (tuple(tuple(tile) for tile in garden), monk_pos, Monk_dir)
         print(state)
 
     return state
@@ -45,7 +45,7 @@ class ZenPuzzleGarden(Problem):
         monk_dir = state[2]
         list_actions = []
 
-        #checks where the monk can enter from when he is outside the garden. 
+        # Checks where the monk can enter from when he is outside the garden. 
         if monk_pos is None: 
             garden = state[0]
             height = len(garden)
@@ -54,16 +54,16 @@ class ZenPuzzleGarden(Problem):
             for row in range(height):
                 for col in range(width):
                     if garden[row][col] == '':
-                        #checks the top row and that it is empty
+                        # Checks the top row and that it is empty
                         if row == 0 and garden[row + 1][col] == '':
                             list_actions.append(((row,col), 'down'))
-                        #checks the bottom row and that it is empty
-                        if row == height -1 and garden[row - 1][col] == '':
+                        # Checks the bottom row and that it is empty
+                        if row == height - 1 and garden[row - 1][col] == '':
                             list_actions.append(((row,col), 'up'))
-                        #checks the left column and that it is empty
-                        if col == 0 and garden [row][col - 1] == '':
+                        # Checks the left column and that it is empty
+                        if col == 0 and garden[row][col + 1] == '':
                             list_actions.append(((row,col), 'right'))
-                        #checks the right column and that it is empty
+                        # Checks the right column and that it is empty
                         if col == width - 1 and garden[row][col - 1] == '':
                             list_actions.append(((row,col), 'left'))
 
@@ -73,20 +73,19 @@ class ZenPuzzleGarden(Problem):
             width = len(garden[0])
             row, col = monk_pos
 
-            #checks if it is facing left or right so it can only move up or down. 
+            # Checks if it is facing left or right so it can only move up or down. 
             if monk_dir == 'left' or monk_dir == 'right':
-                #check if monk can move up
+                # Check if monk can move up
                 if row > 0 and garden[row - 1][col] == '':
                     list_actions.append(((row - 1,col), 'up'))
-                #check if monk can move down
+                # Check if monk can move down
                 if row < height - 1 and garden[row + 1][col] == '':
                     list_actions.append(((row + 1,col), 'down'))
             elif monk_dir == 'up' or monk_dir == 'down':
-
-                #check if monk can move left
+                # Check if monk can move left
                 if col > 0 and garden[row][col - 1] == '':
                     list_actions.append(((row,col - 1), 'left'))
-                #check if monk can move right 
+                # Check if monk can move right 
                 if col < width - 1 and garden[row][col +1] == '':
                     list_actions.append(((row,col + 1), 'right'))
         return list_actions
@@ -118,12 +117,8 @@ class ZenPuzzleGarden(Problem):
             else:
                 return state  # Monk can't move to the new position (rock or raked), return the same state
 
-
-
-
+    #hello
     def goal_test(self, state):
-        # Task 2.3
-        # Return a boolean value indicating if a given state is solved.
         garden, monk_position, monk_direction = state
         height = len(garden)
         width = len(garden[0])
@@ -140,6 +135,10 @@ class ZenPuzzleGarden(Problem):
             if row == 0 or row == height - 1 or col == 0 or col == width - 1:
                 return True  # Monk is back at the perimeter, goal reached
         return False  # Monk is not back at the perimeter, goal not reached
+
+
+
+
     
 
 
